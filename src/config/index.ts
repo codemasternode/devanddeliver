@@ -9,5 +9,6 @@ export default {
     },
     mongo: {
         db: process.env.MONGO_DB,
+        port: process.env.MONGO_PORT
     }
 }

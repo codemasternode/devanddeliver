@@ -25,5 +25,3 @@ services:
     image: mongo:4.4.2
     ports:
       - 27018:27017
-    volumes:
-      - ./data:/data/db
