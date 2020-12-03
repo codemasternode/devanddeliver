@@ -1,0 +1,36 @@
+{
+    "root": true,
+    "env": {
+        "browser": true,
+        "es2021": true
+    },
+    "extends": [
+        "prettier/@typescript-eslint",
+        "plugin:prettier/recommended",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "parserOptions": {
+        "ecmaVersion": 12,
+        "sourceType": "module"
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "rules": {
+        "prettier/prettier": [
+            1,
+            {
+                "semi": false,
+                "singleQuote": true,
+                "tabWidth": 4,
+            },
+        ],
+        "import/prefer-default-export": "off",
+        "@typescript-eslint/ban-ts-comment": "off",
+        "no-console": 1,
+        "semi": "off"
+    },
+    "parser": "@typescript-eslint/parser"
+}
