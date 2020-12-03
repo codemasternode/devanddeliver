@@ -3,14 +3,16 @@
 version: "3.7"
 services:
   server:
+    env_file:
+      - .env
     restart: always
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - NODE_PORT=${NODE_PORT}
     ports:
-      - "9000:8000"
-    env_file:
-      - .env
+      - 9000:${NODE_PORT}
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
@@ -22,6 +24,6 @@ services:
   mongo:
     image: mongo:4.4.2
     ports:
-      - "27018:27017"
+      - 27018:27017
     volumes:
       - ./data:/data/db
