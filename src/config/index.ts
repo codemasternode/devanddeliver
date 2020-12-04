@@ -6,7 +6,8 @@ export default {
     },
     node: {
         PORT: process.env.NODE_PORT || "3000",
-        genSalt: Number(process.env.GEN_SALT)
+        genSalt: Number(process.env.GEN_SALT),
+        swapiApiURL: process.env.SWAPI_API_URL
     },
     mongo: {
         db: process.env.MONGO_DB,
