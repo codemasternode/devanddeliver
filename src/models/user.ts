@@ -1,5 +1,5 @@
-import { Schema, model, Document } from 'mongoose'
-import { IUser } from '../types'
+import { Schema, model } from 'mongoose'
+import { IUser, IUserModel } from '../types'
 import { genSalt, hash, compare } from 'bcryptjs'
 import config from '../config'
 
@@ -20,9 +20,23 @@ const userSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    heroName: {
-        type: String,
-        required: true
+    hero: {
+        name: String,
+        height: String,
+        mass: String,
+        hair_color: String,
+        skin_color: String,
+        eye_color: String,
+        birth_year: String,
+        gender: String,
+        homeworld: String,
+        films: Array,
+        species: Array,
+        vehicles: Array,
+        starships: Array,
+        created: String,
+        edited: String,
+        url: String
     }
 })
 
@@ -52,9 +66,6 @@ userSchema.methods.comparePassword = async function (candidatePassword: string):
     }
 };
 
-interface IUserModel extends IUser, Document {
-    comparePassword(candidatePassword: string): Promise<boolean | never>
-}
 
 const UserModel = model<IUserModel>("user", userSchema)
 

@@ -12,7 +12,7 @@ export class UserService {
         try {
             const countPeople = await SwapiAPI.getNumberOfPeople()
             const randomHero = await SwapiAPI.getPeopleById(Math.floor(Math.random() * countPeople + 1))
-            const savedUser = await UserModel.create({ ...user, heroName: randomHero.name })
+            const savedUser = await UserModel.create({ ...user, hero: randomHero })
 
             const response: IUserResponse = {
                 ...savedUser.toJSON()
@@ -51,7 +51,7 @@ export class UserService {
                     message: "Email or password are invalid"
                 })
             }
-            return await JWTAuthentication.createJWT({ email: user.email, heroName: document.heroName })
+            return await JWTAuthentication.createJWT({ email: user.email, hero: document.hero })
         } catch (err) {
             if (err.name === 'AuthenticationError') {
                 throw err
