@@ -1,4 +1,6 @@
+import { IPeople } from "../people";
+
 export interface IGetAuthTokenInfo {
     email: string;
-    heroName: string;
+    hero: IPeople;
 }

@@ -20,9 +20,23 @@ const userSchema: Schema = new Schema({
         type: String,
         required: true
     },
-    heroName: {
-        type: String,
-        required: true
+    hero: {
+        name: String,
+        height: String,
+        mass: String,
+        hair_color: String,
+        skin_color: String,
+        eye_color: String,
+        birth_year: String,
+        gender: String,
+        homeworld: String,
+        films: Array,
+        species: Array,
+        vehicles: Array,
+        starships: Array,
+        created: String,
+        edited: String,
+        url: String
     }
 })
 
