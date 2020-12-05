@@ -1,5 +1,5 @@
-import { Schema, model, Document } from 'mongoose'
-import { IUser } from '../types'
+import { Schema, model } from 'mongoose'
+import { IUser, IUserModel } from '../types'
 import { genSalt, hash, compare } from 'bcryptjs'
 import config from '../config'
 
@@ -52,9 +52,6 @@ userSchema.methods.comparePassword = async function (candidatePassword: string):
     }
 };
 
-interface IUserModel extends IUser, Document {
-    comparePassword(candidatePassword: string): Promise<boolean | never>
-}
 
 const UserModel = model<IUserModel>("user", userSchema)
 
