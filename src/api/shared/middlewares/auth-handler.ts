@@ -16,7 +16,7 @@ export async function verifyToken(req: IGetUserAuthInfoRequest, res: Response, n
         })
         req.user = {
             email: (decrypt as IGetAuthTokenInfo).email,
-            heroName: (decrypt as IGetAuthTokenInfo).heroName
+            hero: (decrypt as IGetAuthTokenInfo).hero
         };
         next();
     } catch (err) {

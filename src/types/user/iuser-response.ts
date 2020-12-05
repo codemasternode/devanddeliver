@@ -1,7 +1,9 @@
+import { IPeople } from "../people";
+
 interface IUserResponse {
     [x: string]: any;
     email: string;
-    heroName: string
+    hero: IPeople
 }
 
 export { IUserResponse }
