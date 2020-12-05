@@ -3,7 +3,7 @@ import { UserService } from '../../../services'
 
 const userService = new UserService()
 
-export async function singUp(req: Request, res: Response, next: NextFunction) {
+export async function signUp(req: Request, res: Response, next: NextFunction) {
     try {
         const newUser = await userService.SignUp(req.body)
         res.send({ ...newUser })

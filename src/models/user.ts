@@ -1,4 +1,4 @@
-import { Schema, model } from 'mongoose'
+import { Schema, model, Document } from 'mongoose'
 import { IUser } from '../types'
 import { genSalt, hash, compare } from 'bcryptjs'
 import config from '../config'
@@ -13,12 +13,12 @@ const userSchema: Schema = new Schema({
     email: {
         type: String,
         required: true,
-        validate: [validateEmail, "Please fill a valid email address"]
+        validate: [validateEmail, "Please fill a valid email address"],
+        unique: true
     },
     password: {
         type: String,
-        required: true,
-        select: false
+        required: true
     },
     heroName: {
         type: String,
@@ -45,6 +45,7 @@ userSchema.pre<IUser>("save", async function (next) {
 
 userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean | never> {
     try {
+        console.log(candidatePassword, this)
         const isPasswordValid = compare(candidatePassword, this.password)
         return isPasswordValid
     } catch (err) {
@@ -52,6 +53,10 @@ userSchema.methods.comparePassword = async function (candidatePassword: string):
     }
 };
 
-const UserModel = model<IUser>("user", userSchema)
+interface IUserModel extends IUser, Document {
+    comparePassword(candidatePassword: string): Promise<boolean | never>
+}
+
+const UserModel = model<IUserModel>("user", userSchema)
 
 export default UserModel

@@ -6,4 +6,8 @@ interface IUser extends Document {
     heroName: string
 }
 
+interface IUserDocument extends IUser {
+    comparePassword(password: string): boolean;
+}
+
 export { IUser }

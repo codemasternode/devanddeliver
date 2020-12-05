@@ -3,6 +3,9 @@ import { UserModel } from '../models'
 import { InternalError, IUser, IUserResponse, MongoDBValidationError } from '../types'
 import { IUserRequest } from '../types/user/iuser-request'
 import { SwapiAPI } from './index'
+import { AuthenticationError } from '../types/errors/authentication-error'
+import { JWTAuthentication } from '.'
+
 
 export class UserService {
     async SignUp(user: IUserRequest): Promise<IUserResponse | never> {
@@ -26,6 +29,35 @@ export class UserService {
                 })
                 throw new MongoDBValidationError(errors)
             }
+            throw new InternalError({
+                message: err.toString()
+            })
+        }
+    }
+    async SignIn(user: IUserRequest): Promise<string | never> {
+        try {
+            const document = await UserModel.findOne({
+                email: user.email
+            })
+            if (!document) {
+                throw new AuthenticationError({
+                    message: "Email or password are invalid"
+                })
+            }
+
+            const isPasswordMatch = await document?.comparePassword(user.password)
+            console.log("XD", isPasswordMatch)
+            if (!isPasswordMatch) {
+                throw new AuthenticationError({
+                    message: "Email or password are invalid"
+                })
+            }
+            return await JWTAuthentication.createJWT({ email: user.email })
+        } catch (err) {
+            if (err.name === 'AuthenticationError') {
+                throw err
+            }
+            console.log(err)
             throw new InternalError({
                 message: err.toString()
             })

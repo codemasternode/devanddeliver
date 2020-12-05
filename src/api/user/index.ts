@@ -1,11 +1,12 @@
 import express from 'express'
-import { singUp } from './controllers'
+import { signUp, signIn } from './controllers'
 
 const router = express.Router();
 
 export default () => {
 
-    router.post("/singup", singUp)
+    router.post("/sign-up", signUp)
+    router.post("/sign-in", signIn)
 
     return router
 }
