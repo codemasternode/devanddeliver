@@ -56,7 +56,6 @@ export class UserService {
             if (err.name === 'AuthenticationError') {
                 throw err
             }
-            console.log(err)
             throw new InternalError({
                 message: err.toString()
             })

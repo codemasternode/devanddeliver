@@ -4,7 +4,6 @@ import config from '../../../config'
 import { IGetAuthTokenInfo, IGetUserAuthInfoRequest } from '../../../types'
 
 export async function verifyToken(req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) {
-    console.log(req.cookies, 7)
     const token = req.cookies.token
     try {
         if (!token) {

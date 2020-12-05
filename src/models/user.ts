@@ -45,7 +45,6 @@ userSchema.pre<IUser>("save", async function (next) {
 
 userSchema.methods.comparePassword = async function (candidatePassword: string): Promise<boolean | never> {
     try {
-        console.log(candidatePassword, this)
         const isPasswordValid = compare(candidatePassword, this.password)
         return isPasswordValid
     } catch (err) {
