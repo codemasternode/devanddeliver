@@ -9,7 +9,7 @@ export default {
         genSalt: Number(process.env.GEN_SALT),
         swapiApiURL: process.env.SWAPI_API_URL,
         privateJWTKey: process.env.PRIVATE_JWT_KEY || "",
-        jwtAlgorithm: process.env.JWT_ALGORITHM,
+        jwtAlgorithm: process.env.JWT_ALGORITHM || 'RS256',
         jwtExpire: Number(process.env.JWT_EXPIRE_MS)
     },
     mongo: {

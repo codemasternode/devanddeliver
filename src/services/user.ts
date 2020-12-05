@@ -46,13 +46,12 @@ export class UserService {
             }
 
             const isPasswordMatch = await document?.comparePassword(user.password)
-            console.log("XD", isPasswordMatch)
             if (!isPasswordMatch) {
                 throw new AuthenticationError({
                     message: "Email or password are invalid"
                 })
             }
-            return await JWTAuthentication.createJWT({ email: user.email })
+            return await JWTAuthentication.createJWT({ email: user.email, heroName: document.heroName })
         } catch (err) {
             if (err.name === 'AuthenticationError') {
                 throw err

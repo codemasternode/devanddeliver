@@ -1,12 +1,15 @@
 import express, { NextFunction, Request, Response } from 'express'
 import cors from 'cors'
+import cookieParser from 'cookie-parser'
 import { errorHandler } from '../api/shared/middlewares/error-handler'
 import userRoutes from '../api/user'
 import { CommonError } from '../types'
 
+
 export default async (app: express.Application): Promise<express.Application> => {
 
     app.use(cors())
+    app.use(cookieParser())
     app.use(express.urlencoded({ extended: true }))
     app.use(express.json())
 
