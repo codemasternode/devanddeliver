@@ -1,13 +1,20 @@
 import { Error } from 'mongoose'
 import { UserModel } from '../models'
-import { InternalError, IUser, IUserResponse, MongoDBValidationError } from '../types'
+import { InternalError, IPeople, IUser, IUserResponse, MongoDBValidationError, AuthenticationError, NotFoundError } from '../types'
 import { IUserRequest } from '../types/user/iuser-request'
 import { SwapiAPI } from './index'
-import { AuthenticationError } from '../types/errors/authentication-error'
 import { JWTAuthentication } from '.'
+import { Cache } from './index'
+
 
 
 export class UserService {
+
+    cache: Cache
+
+    constructor() {
+        this.cache = new Cache(86400)
+    }
     async SignUp(user: IUserRequest): Promise<IUserResponse | never> {
         try {
             const countPeople = await SwapiAPI.getNumberOfPeople()
@@ -61,4 +68,32 @@ export class UserService {
             })
         }
     }
+
+    async getUserProfileByEmail(email: string): Promise<IUser | never> {
+        try {
+            const user = await this.cache.get(email, async () => {
+                const user = await UserModel.findOne({
+                    email
+                })
+
+                return user
+            })
+
+            if (!user) {
+                throw new NotFoundError({
+                    message: `User with ${email} doesn't exist`
+                })
+            }
+
+            return user as IUser
+        } catch (err) {
+            if (err.name === "NotFoundError") {
+                throw err
+            }
+            throw new InternalError({
+                message: err.toString()
+            })
+        }
+    }
+
 }
