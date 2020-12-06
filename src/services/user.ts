@@ -35,6 +35,10 @@ export class UserService {
                     }
                 })
                 throw new MongoDBValidationError(errors)
+            } else if (err.name === 'MongoError' && err.code === 11000) {
+                throw new MongoDBValidationError({
+                    message: "Email has to be unique"
+                })
             }
             throw new InternalError({
                 message: err.toString()
