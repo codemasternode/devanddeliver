@@ -1,1 +1,1 @@
-export type IUserArrayNames = 'films' | 'species' | 'vehicles' | 'starships' | 'homeworld'
+export type IUserArrayNames = 'films' | 'species' | 'vehicles' | 'starships'

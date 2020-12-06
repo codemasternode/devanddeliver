@@ -11,7 +11,7 @@ export async function getProfile(req: IGetUserAuthInfoRequest, res: Response, ne
         const user = await userService.getUserProfileByEmail(req.user.email)
 
         const promises: any[] = []
-        const urls: { name: IUserArrayNames, array: unknown[] }[] = [
+        const urls: { name: IUserArrayNames | 'homeworld', array: unknown[] }[] = [
             { name: 'films', array: [...user.hero.films] },
             { name: 'species', array: [...user.hero.species] },
             { name: 'vehicles', array: [...user.hero.vehicles] },
@@ -46,7 +46,7 @@ export async function getProfile(req: IGetUserAuthInfoRequest, res: Response, ne
             }
 
         }
-        data.forEach(({ name, data }: { name: IUserArrayNames, data: object }) => {
+        data.forEach(({ name, data }: { name: IUserArrayNames | 'homeworld', data: object }) => {
             if (name === 'homeworld') {
                 profile.hero.homeworld = data
             } else {
