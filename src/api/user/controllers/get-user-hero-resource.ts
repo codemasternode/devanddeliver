@@ -2,25 +2,16 @@ import { Request, Response, NextFunction } from 'express'
 import { SwapiAPI, UserService } from '../../../services'
 import { IGetUserAuthInfoRequest, IUserArrayNames } from '../../../types'
 
-const userService = new UserService()
 const swapiAPIService = new SwapiAPI()
+const userService = new UserService(swapiAPIService)
 
 export function getUserHeroResource(resource: IUserArrayNames) {
     return async function (req: IGetUserAuthInfoRequest, res: Response, next: NextFunction) {
         try {
-            const user = await userService.getUserProfileByEmail(req.user.email)
-
-            const promises: any[] = []
-            user.hero[resource].forEach((url) => {
-                promises.push((async () => {
-                    return await swapiAPIService.getResourceFromURL(url as string)
-                })())
-            })
-            const data = await Promise.all(promises)
+            const userHeroResource = await userService.getUserHeroResource(req.user.email, resource)
             res.send({
-                [resource]: data
+                [resource]: userHeroResource
             })
-
         } catch (error) {
             next(error)
         }
