@@ -1,6 +1,5 @@
 import config from '../config'
 import mongoose, { Mongoose } from 'mongoose'
-import { UserModel } from '../models'
 
 const { mongo: { db, port } } = config
 

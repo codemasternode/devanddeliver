@@ -1,6 +1,6 @@
 import { Error } from 'mongoose'
 import { UserModel } from '../models'
-import { InternalError, IPeople, IUser, IUserResponse, MongoDBValidationError, AuthenticationError, NotFoundError } from '../types'
+import { InternalError, IUser, IUserResponse, MongoDBValidationError, AuthenticationError, NotFoundError } from '../types'
 import { IUserRequest } from '../types/user/iuser-request'
 import { SwapiAPI } from './index'
 import { JWTAuthentication } from '.'

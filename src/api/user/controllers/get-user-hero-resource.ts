@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express'
 import { SwapiAPI, UserService } from '../../../services'
-import { IGetUserAuthInfoRequest, SwapiResponse, IUserArrayNames, IPeopleResponse, IPeople, IUserResponse, IUserProfile } from '../../../types'
+import { IGetUserAuthInfoRequest, IUserArrayNames } from '../../../types'
 
 const userService = new UserService()
 const swapiAPIService = new SwapiAPI()
