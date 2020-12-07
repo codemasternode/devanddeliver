@@ -1,7 +1,8 @@
 import { Request, Response, NextFunction } from 'express'
-import { UserService } from '../../../services'
+import { SwapiAPI, UserService } from '../../../services'
 
-const userService = new UserService()
+const swapiAPIService = new SwapiAPI()
+const userService = new UserService(swapiAPIService)
 
 export async function signUp(req: Request, res: Response, next: NextFunction) {
     try {

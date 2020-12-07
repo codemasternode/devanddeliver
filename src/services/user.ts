@@ -1,19 +1,19 @@
 import { Error } from 'mongoose'
 import { UserModel } from '../models'
-import { InternalError, IPeople, IUser, IUserResponse, MongoDBValidationError, AuthenticationError, NotFoundError } from '../types'
+import { InternalError, IUser, IUserResponse, MongoDBValidationError, AuthenticationError, NotFoundError, IUserProfile, IUserArrayNames, ForbiddenError } from '../types'
 import { IUserRequest } from '../types/user/iuser-request'
 import { SwapiAPI } from './index'
 import { JWTAuthentication } from '.'
 import { Cache } from './index'
 
-
-
 export class UserService {
 
-    cache: Cache
+    cache: Cache;
+    swapiApiService: SwapiAPI;
 
-    constructor() {
+    constructor(swapiApiService: SwapiAPI) {
         this.cache = new Cache(86400)
+        this.swapiApiService = swapiApiService
     }
     async SignUp(user: IUserRequest): Promise<IUserResponse | never> {
         try {
@@ -99,5 +99,92 @@ export class UserService {
             })
         }
     }
+
+    async getProfile(email: string) {
+        try {
+            const user = await this.getUserProfileByEmail(email)
+
+            const promises: any[] = []
+            const urls: { name: IUserArrayNames | 'homeworld', array: unknown[] }[] = [
+                { name: 'films', array: [...user.hero.films] },
+                { name: 'species', array: [...user.hero.species] },
+                { name: 'vehicles', array: [...user.hero.vehicles] },
+                { name: 'starships', array: [...user.hero.starships] },
+                { name: 'homeworld', array: [user.hero.homeworld] }
+            ]
+            user.hero.films = []
+            user.hero.species = []
+            user.hero.vehicles = []
+            user.hero.starships = []
+
+            urls.forEach(({ name, array }) => {
+                array.forEach((url) => {
+                    promises.push((async () => {
+                        return {
+                            name,
+                            data: await this.swapiApiService.getResourceFromURL(url as string)
+                        }
+                    })())
+                })
+            })
+            const data = await Promise.all(promises)
+            const profile: IUserProfile = {
+                email: user.email,
+                // @ts-ignore
+                hero: {
+                    ...user.hero,
+                    films: [],
+                    species: [],
+                    vehicles: [],
+                    starships: [],
+                }
+
+            }
+            data.forEach(({ name, data }: { name: IUserArrayNames | 'homeworld', data: object }) => {
+                if (name === 'homeworld') {
+                    profile.hero.homeworld = data
+                } else {
+                    profile.hero[name].push(data)
+                }
+            })
+            return profile
+        } catch (err) {
+            throw err
+        }
+    }
+
+    async getResourceById(email: string, resource: IUserArrayNames, id: string) {
+        try {
+            const user = await this.getUserProfileByEmail(email)
+
+            const promises: any[] = []
+            for (let i = 0; i < user.hero[resource].length; i++) {
+                const url = user.hero[resource][i]
+                if (url.includes(id)) {
+                    const fetchedResource = this.swapiApiService.getResourceFromURL(url as string)
+                    return fetchedResource
+                }
+            }
+            throw new ForbiddenError({
+                message: "Your hero doesn't have access to this resource"
+            })
+        } catch (err) {
+            throw err
+        }
+    }
+
+    async getUserHeroResource(email: string, resource: IUserArrayNames) {
+        const user = await this.getUserProfileByEmail(email)
+
+        const promises: any[] = []
+        user.hero[resource].forEach((url) => {
+            promises.push((async () => {
+                return await this.swapiApiService.getResourceFromURL(url as string)
+            })())
+        })
+        const data = await Promise.all(promises)
+        return data
+    }
+
 
 }

@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express'
+import { Response, NextFunction } from 'express'
 import { verify, Algorithm } from 'jsonwebtoken'
 import config from '../../../config'
 import { IGetAuthTokenInfo, IGetUserAuthInfoRequest } from '../../../types'
