@@ -25,11 +25,17 @@ POST /api/auth/logout
 GET /api/user/profile
 
 GET /api/user/films
+
 GET /api/user/species
+
 GET /api/user/vehicles
+
 GET /api/user/starships
 
 GET /api/user/films/:id
+
 GET /api/user/species/:id
+
 GET /api/user/vehicles/:id
+
 GET /api/user/starships/:id
